@@ -7,7 +7,8 @@ import { DBModule } from './database/db.module';
   imports: [ 
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true}), 
     ApiModule, 
-    DBModule
+    DBModule,
+    ApiModule
   ],
   controllers: [],
   providers: [],

@@ -5,14 +5,14 @@ export class CreateUserDto {
     @IsString()
     email: string;
     @IsString()
-    password?: string;
+    password: string;
     @IsNotEmpty()
     @IsString()
     name: string;
     @IsString()
-    surname?: string;
+    surname: string;
     @IsString()
-    country?: string;
+    country: string;
     @IsString()
-    province?: string;
+    province: string;
 }

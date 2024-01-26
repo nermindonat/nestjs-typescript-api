@@ -7,9 +7,8 @@ export class UserService {
     constructor (private readonly DBService: DBService) {}
 
     async create(payload: CreateUserDto) {
-        const item = (await this.DBService.user.create({
+        return await this.DBService.user.create({
             data: payload
-        }))
-        return item
+        })
     }
 }
