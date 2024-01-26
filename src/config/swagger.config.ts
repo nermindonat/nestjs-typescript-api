@@ -6,7 +6,6 @@ export const setupSwagger = (app: INestApplication) =>  {
     .setTitle('E-commerce Services')
     .setDescription('The E-commerce Services')
     .setVersion('1.0')
-    .addTag('example')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
