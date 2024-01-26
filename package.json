@@ -13,6 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "generate": "npx prisma generate --schema prisma/schema.prisma",
     "migrate": "npx prisma migrate dev --name init --schema ./prisma/schema.prisma",
+    "migrate-reset": "npx prisma migrate reset --schema ./prisma/schema.prisma",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
