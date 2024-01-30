@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { DBService } from "src/database/DB.service";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { Prisma } from "@prisma/client";
+import { User } from "./entity/user.entity";
 
 @Injectable()
 export class UserService {
@@ -35,4 +36,9 @@ export class UserService {
         return item;
     }
 
+    async findOne(email: string): Promise<User | undefined> {
+        return this.DBService.user.findUnique({
+            where: { email },
+        });
+    }
 }

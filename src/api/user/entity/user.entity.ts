@@ -8,4 +8,5 @@ export class User {
     province: string;
     createdAt: Date;
     updatedAt: Date;
+    deletedAt?: Date
 }

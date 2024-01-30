@@ -24,19 +24,19 @@ export class UserController {
         return this.userService.create(createUserDto);
       }
 
-      @Get(':id')
-      @ApiOperation({ summary: 'Get user by id' })
-      @ApiResponse({ type: User })
-      findWarehouseDefinitionsById(@Param('id') id: string): Promise<User> {
-        return this.userService.findUserById(+id);
-      }
+    @Get(':id')
+    @ApiOperation({ summary: 'Get user by id' })
+    @ApiResponse({ type: User })
+    findWarehouseDefinitionsById(@Param('id') id: string): Promise<User> {
+      return this.userService.findUserById(+id);
+    }
 
-      @Put(':id')
-      @ApiOperation({ summary: 'Update a user'})
-      @ApiResponse({ status: 201, type: User})
-      updateUser(@Param('id') id: string, @Body() data: UpdateUserDto): Promise<User> {
-        return this.userService.updateUser(+id, data)
-      }
+    @Put(':id')
+    @ApiOperation({ summary: 'Update a user'})
+    @ApiResponse({ status: 201, type: User})
+    updateUser(@Param('id') id: string, @Body() data: UpdateUserDto): Promise<User> {
+      return this.userService.updateUser(+id, data)
+    }
 }
 
 
