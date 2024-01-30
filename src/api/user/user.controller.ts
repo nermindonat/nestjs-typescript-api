@@ -1,6 +1,6 @@
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CreateUserDto } from "./dto/createUser.dto";
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { User } from "./entity/user.entity";
 import { UpdateUserDto } from "./dto";
@@ -36,6 +36,13 @@ export class UserController {
     @ApiResponse({ status: 201, type: User})
     updateUser(@Param('id') id: string, @Body() data: UpdateUserDto): Promise<User> {
       return this.userService.updateUser(+id, data)
+    }
+
+    @Delete(':id')
+    @ApiOperation({ summary: 'Delete a user'})
+    @ApiResponse({ type: User})
+    deleteUser(@Param('id') id: string): Promise<User> {
+      return this.userService.deleteUser(+id)
     }
 }
 

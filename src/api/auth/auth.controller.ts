@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Get, Request } from "@nestjs/common";
+import { Controller, Post, UseGuards, Request } from "@nestjs/common";
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "@nestjs/passport";
@@ -16,9 +16,9 @@ export class AuthController {
         return this.authService.login(req.user)
     }
 
-    @UseGuards(AuthGuard('jwt'))
-    @Get('user-info')
-    getUserInfo(@Request() req) {
-      return req.user;
-    }
+    // @UseGuards(AuthGuard('jwt'))
+    // @Get('user-info')
+    // getUserInfo(@Request() req) {
+    //   return req.user;
+    // }
 }

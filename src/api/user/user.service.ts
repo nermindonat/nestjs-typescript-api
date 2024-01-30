@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { DBService } from "src/database/DB.service";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { Prisma } from "@prisma/client";
@@ -40,5 +40,18 @@ export class UserService {
         return this.DBService.user.findUnique({
             where: { email },
         });
+    }
+
+    async deleteUser(id: number) {
+        const item = await this.DBService.user.findUnique({
+            where: { id },
+        })
+        if (!item) {
+            throw new NotFoundException(`User with ID ${id} not found`);
+        }
+        await this.DBService.user.delete({
+            where: { id },
+        })
+        return item
     }
 }
