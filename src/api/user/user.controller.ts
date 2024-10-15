@@ -5,6 +5,7 @@ import { UserService } from "./user.service";
 import { User } from "./entity/user.entity";
 import { UpdateUserDto } from "./dto";
 
+// Controller, uygulamanızın gelen istekleri (HTTP isteklerini) alıp yönettiği yerdir. 
 @ApiTags('user')
 @Controller('user')
 export class UserController {

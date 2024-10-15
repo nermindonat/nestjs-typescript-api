@@ -24,3 +24,15 @@ model User {
 
   @@map("users")
 }
+
+model Product {
+  id        Int       @id @default(autoincrement())
+  name      String
+  price     Float
+  imagePath String?   @map("image_path")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("products")
+}
