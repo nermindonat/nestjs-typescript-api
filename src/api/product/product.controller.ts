@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -18,14 +19,22 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { extname } from 'path';
+import { Product } from './entity/product.entity';
 
 @ApiTags('product')
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @ApiOperation({ summary: 'Get all products' })
+  @ApiResponse({ status: 200, type: [Product] })
+  @Get()
+  findAll() {
+    return this.productService.findAll();
+  }
+
   @ApiOperation({ summary: 'Create product' })
-  @ApiResponse({ status: 200, type: CreateProductDto })
+  @ApiResponse({ status: 201, type: CreateProductDto })
   @Post()
   @ApiConsumes('multipart/form-data') // multipart/form-data kullanarak dosya yüklemesini belirtiyoruz
   @ApiBody({
@@ -65,7 +74,6 @@ export class ProductController {
   ) {
     const imagePath = file ? file.filename : null;
     console.log('Controllerdan gelen image path:', imagePath);
-
     return this.productService.create(createProductDto, imagePath);
   }
 }

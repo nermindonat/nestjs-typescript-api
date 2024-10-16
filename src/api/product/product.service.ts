@@ -5,6 +5,13 @@ import { CreateProductDto } from './dto';
 @Injectable()
 export class ProductService {
   constructor(private readonly DBService: DBService) {}
+
+  async findAll() {
+    const list = await this.DBService.product.findMany();
+    console.log('Product List:', list);
+    return list;
+  }
+
   async create(payload: CreateProductDto, imagePath: string) {
     const price = parseFloat(payload.price.toString());
     return await this.DBService.product.create({
