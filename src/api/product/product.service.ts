@@ -8,7 +8,6 @@ export class ProductService {
 
   async findAll() {
     const list = await this.DBService.product.findMany();
-    console.log('Product List:', list);
     return list;
   }
 
