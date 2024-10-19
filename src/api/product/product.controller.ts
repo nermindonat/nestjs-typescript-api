@@ -54,7 +54,7 @@ export class ProductController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: './src/assets/uploads',
         filename: (req, file, cb) => {
           const uniqueSuffix = uuidv4() + extname(file.originalname);
           cb(null, uniqueSuffix);
@@ -73,7 +73,6 @@ export class ProductController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     const imagePath = file ? file.filename : null;
-    console.log('Controllerdan gelen image path:', imagePath);
     return this.productService.create(createProductDto, imagePath);
   }
 }
