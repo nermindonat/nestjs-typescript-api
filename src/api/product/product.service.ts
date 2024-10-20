@@ -11,13 +11,13 @@ export class ProductService {
     return list;
   }
 
-  async create(payload: CreateProductDto, imagePath: string) {
+  async create(payload: CreateProductDto, image: string) {
     const price = parseFloat(payload.price.toString());
     return await this.DBService.product.create({
       data: {
         name: payload.name,
         price: price,
-        imagePath: imagePath,
+        image: image,
       },
     });
   }

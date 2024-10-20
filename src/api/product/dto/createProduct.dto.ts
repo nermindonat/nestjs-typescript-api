@@ -9,5 +9,5 @@ export class CreateProductDto {
   @IsNumber()
   price: number;
   @IsOptional()
-  imagePath?: Express.Multer.File;
+  image?: Express.Multer.File;
 }

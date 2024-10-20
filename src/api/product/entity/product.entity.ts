@@ -2,7 +2,7 @@ export class Product {
   id: number;
   name: string;
   price: number;
-  imagePath: string;
+  image: string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;

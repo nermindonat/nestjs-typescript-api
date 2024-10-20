@@ -72,7 +72,7 @@ export class ProductController {
     @Body() createProductDto: CreateProductDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const imagePath = file ? file.filename : null;
-    return this.productService.create(createProductDto, imagePath);
+    const image = file ? file.filename : null;
+    return this.productService.create(createProductDto, image);
   }
 }
