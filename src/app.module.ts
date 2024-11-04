@@ -14,7 +14,6 @@ import { join } from 'path';
     }),
     ApiModule,
     DBModule,
-    ApiModule,
   ],
   controllers: [],
   providers: [],

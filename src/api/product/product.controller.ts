@@ -54,7 +54,7 @@ export class ProductController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './src/assets/uploads',
+        destination: './src/assets/uploads', // Yüklenen dosyaların kaydedileceği dizini belirtiyoruz.
         filename: (req, file, cb) => {
           const uniqueSuffix = uuidv4() + extname(file.originalname);
           cb(null, uniqueSuffix);
