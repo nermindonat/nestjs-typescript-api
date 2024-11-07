@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DBService } from 'src/database/DB.service';
 import { CreateProductDto } from './dto';
 
@@ -20,5 +20,17 @@ export class ProductService {
         image: image,
       },
     });
+  }
+
+  async findProductById(id: number) {
+    const item = await this.DBService.product.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!item) {
+      throw new NotFoundException('Product not found');
+    }
+    return item;
   }
 }

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -31,6 +32,13 @@ export class ProductController {
   @Get()
   findAll() {
     return this.productService.findAll();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get product by id' })
+  @ApiResponse({ type: Product })
+  findProductById(@Param('id') id: string): Promise<Product> {
+    return this.productService.findProductById(+id);
   }
 
   @ApiOperation({ summary: 'Create product' })
