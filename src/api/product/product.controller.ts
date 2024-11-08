@@ -34,13 +34,6 @@ export class ProductController {
     return this.productService.findAll();
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Get product by id' })
-  @ApiResponse({ type: Product })
-  findProductById(@Param('id') id: string): Promise<Product> {
-    return this.productService.findProductById(+id);
-  }
-
   @ApiOperation({ summary: 'Create product' })
   @ApiResponse({ status: 201, type: CreateProductDto })
   @Post()
@@ -52,6 +45,7 @@ export class ProductController {
       properties: {
         name: { type: 'string' },
         price: { type: 'number' },
+        description: { type: 'string' },
         image: {
           type: 'string',
           format: 'binary', // Swagger'da dosya yükleme alanı oluşturur
@@ -82,5 +76,12 @@ export class ProductController {
   ) {
     const image = file ? file.filename : null;
     return this.productService.create(createProductDto, image);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get product by id' })
+  @ApiResponse({ type: Product })
+  findProductById(@Param('id') id: string): Promise<Product> {
+    return this.productService.findProductById(+id);
   }
 }
