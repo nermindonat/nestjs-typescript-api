@@ -12,7 +12,7 @@ export class ProductService {
   }
 
   async create(payload: CreateProductDto, image: string) {
-    return await this.DBService.product.create({
+    const product = await this.DBService.product.create({
       data: {
         name: payload.name,
         description: payload.description,
@@ -20,12 +20,32 @@ export class ProductService {
         image: image,
       },
     });
+
+    await Promise.all(
+      payload.variantValueIds.map(async (variantValueId) => {
+        await this.DBService.productVariant.create({
+          data: {
+            productId: product.id,
+            variantValueId,
+          },
+        });
+      }),
+    );
+
+    return product;
   }
 
   async findProductById(id: number) {
     const item = await this.DBService.product.findUnique({
       where: {
         id,
+      },
+      include: {
+        productVariants: {
+          include: {
+            variantValue: true,
+          },
+        },
       },
     });
     if (!item) {

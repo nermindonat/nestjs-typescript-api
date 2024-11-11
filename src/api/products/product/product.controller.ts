@@ -46,6 +46,12 @@ export class ProductController {
         name: { type: 'string' },
         price: { type: 'number' },
         description: { type: 'string' },
+        variantValueIds: {
+          type: 'array',
+          items: {
+            type: 'integer',
+          },
+        },
         image: {
           type: 'string',
           format: 'binary', // Swagger'da dosya yükleme alanı oluşturur

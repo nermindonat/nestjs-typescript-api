@@ -26,14 +26,40 @@ model User {
 }
 
 model Product {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String?
-  price       Float
-  image       String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  id              Int              @id @default(autoincrement())
+  name            String
+  description     String?
+  price           Float
+  image           String?
+  productVariants ProductVariant[]
 
   @@map("products")
+}
+
+model Variant {
+  id     Int            @id @default(autoincrement())
+  name   String
+  values VariantValue[]
+
+  @@map("variant")
+}
+
+model VariantValue {
+  id              Int              @id @default(autoincrement())
+  variantId       Int              @map("variant_id")
+  variant         Variant          @relation(fields: [variantId], references: [id])
+  value           String
+  productVariants ProductVariant[]
+
+  @@map("variant_value")
+}
+
+model ProductVariant {
+  id             Int          @id @default(autoincrement())
+  productId      Int          @map("product_id")
+  product        Product      @relation(fields: [productId], references: [id])
+  variantValueId Int          @map("variant_value_id")
+  variantValue   VariantValue @relation(fields: [variantValueId], references: [id])
+
+  @@map("product_variant")
 }
