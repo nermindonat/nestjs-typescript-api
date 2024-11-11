@@ -5,6 +5,6 @@ export class Product {
   name: string;
   description?: string;
   price: number;
-  productVariants: ProductVariant[];
+  productVariants?: ProductVariant[];
   image?: string;
 }

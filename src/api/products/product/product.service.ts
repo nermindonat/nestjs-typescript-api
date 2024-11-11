@@ -43,14 +43,38 @@ export class ProductService {
       include: {
         productVariants: {
           include: {
-            variantValue: true,
+            variantValue: {
+              include: {
+                variant: true,
+              },
+            },
           },
         },
       },
     });
+
     if (!item) {
       throw new NotFoundException('Product not found');
     }
-    return item;
+    const groupedVariants = item.productVariants.reduce(
+      (acc, variant) => {
+        const variantName = variant.variantValue.variant.name;
+        const variantValue = variant.variantValue.value;
+
+        if (!acc[variantName]) {
+          acc[variantName] = [];
+        }
+
+        acc[variantName].push(variantValue);
+        return acc;
+      },
+      {} as Record<string, string[]>,
+    );
+
+    const { productVariants, ...productWithoutVariants } = item;
+    return {
+      ...productWithoutVariants,
+      groupedVariants,
+    };
   }
 }
