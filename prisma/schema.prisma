@@ -11,18 +11,34 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
   password  String
   name      String
   surname   String
   country   String
   province  String
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime?  @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+  favorites Favorite[]
+
+  @@map("users")
+}
+
+model Favorite {
+  id        Int     @id @default(autoincrement())
+  userId    Int     @map("user_id")
+  user      User    @relation(fields: [userId], references: [id])
+  productId Int     @map("product_id")
+  product   Product @relation(fields: [productId], references: [id])
+
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  @@map("users")
+  @@unique([userId, productId])
+  @@map("favorites")
 }
 
 model Product {
@@ -32,6 +48,7 @@ model Product {
   price           Float
   image           String?
   productVariants ProductVariant[]
+  favorites       Favorite[]
 
   @@map("products")
 }
