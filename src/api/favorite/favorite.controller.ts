@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Request,
   UnauthorizedException,
@@ -28,7 +30,7 @@ export class FavoriteController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('token')
-  async findAll(@Request() req): Promise<Favorite[]>  {
+  async findAll(@Request() req): Promise<Favorite[]> {
     const userId = req.user.userId;
     if (!userId) {
       throw new UnauthorizedException('User ID not found in token');
@@ -44,5 +46,15 @@ export class FavoriteController {
   create(@Request() req, @Body() createFavoriteDto: CreateFavoriteDto) {
     const userId = req.user.userId;
     return this.favoriteService.create(createFavoriteDto, userId);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a favorite product' })
+  @ApiResponse({ type: Favorite })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('token')
+  async deleteUser(@Request() req, @Param('id') id: string): Promise<Favorite> {
+    const userId = req.user.userId;
+    return this.favoriteService.delete(+id, userId);
   }
 }

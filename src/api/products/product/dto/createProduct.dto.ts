@@ -25,7 +25,6 @@ export class CreateProductDto {
   price: number;
 
   @IsArray()
-  @ArrayNotEmpty()
   @Transform(({ value }) => {
     if (Array.isArray(value)) return value;
     if (typeof value === 'string') {
