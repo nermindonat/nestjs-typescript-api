@@ -4,6 +4,8 @@ export class User {
   password: string;
   name: string;
   surname: string;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
   createdAt: Date;
   updatedAt?: Date;
   deletedAt?: Date;

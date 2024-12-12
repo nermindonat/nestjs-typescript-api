@@ -11,15 +11,17 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
-  password  String
-  name      String
-  surname   String
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime?  @updatedAt @map("updated_at")
-  deletedAt DateTime?  @map("deleted_at")
-  favorites Favorite[]
+  id                   Int        @id @default(autoincrement())
+  email                String     @unique
+  password             String
+  name                 String
+  surname              String
+  resetPasswordToken   String?    @map("reset_password_token") // Opsiyonel alan
+  resetPasswordExpires DateTime?  @map("reset_password_expires")
+  createdAt            DateTime   @default(now()) @map("created_at")
+  updatedAt            DateTime?  @updatedAt @map("updated_at")
+  deletedAt            DateTime?  @map("deleted_at")
+  favorites            Favorite[]
 
   @@map("users")
 }

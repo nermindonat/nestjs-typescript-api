@@ -8,12 +8,14 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../user/entity/user.entity';
 import { UserService } from '../user/user.service';
 import { RegisterDto } from './dto/register.dto';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userSevice: UserService,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -55,5 +57,13 @@ export class AuthService {
     return {
       token: this.jwtService.sign(payload),
     };
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.userSevice.findOne(email);
+    if (!user) {
+      throw new NotFoundException('No user found for email');
+    }
+    await this.mailService.sendResetPasswordLink(email);
   }
 }
