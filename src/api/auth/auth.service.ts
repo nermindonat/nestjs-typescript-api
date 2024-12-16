@@ -9,6 +9,7 @@ import { User } from '../user/entity/user.entity';
 import { UserService } from '../user/user.service';
 import { RegisterDto } from './dto/register.dto';
 import { MailService } from '../mail/mail.service';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -65,5 +66,36 @@ export class AuthService {
       throw new NotFoundException('No user found for email');
     }
     await this.mailService.sendResetPasswordLink(email);
+  }
+
+  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
+    const { newPassword, newPasswordAgain } = resetPasswordDto;
+
+    if (newPassword !== newPasswordAgain) {
+      throw new BadRequestException('Passwords do not match');
+    }
+
+    let payload;
+    try {
+      payload = this.jwtService.verify(token);
+    } catch (error) {
+      throw new BadRequestException('Invalid or expired reset token');
+    }
+
+    const email = payload.email;
+    if (!email) {
+      throw new BadRequestException('Invalid reset token');
+    }
+
+    const user = await this.userSevice.findOne(email);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await this.userSevice.updateUser(user.id, { password: hashedPassword });
+
+    return { message: 'Password reset successfully' };
   }
 }
