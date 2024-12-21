@@ -11,34 +11,48 @@ datasource db {
 }
 
 model User {
-  id                   Int        @id @default(autoincrement())
-  email                String     @unique
-  password             String
-  name                 String
-  surname              String
-  resetPasswordToken   String?    @map("reset_password_token") // Opsiyonel alan
-  resetPasswordExpires DateTime?  @map("reset_password_expires")
-  createdAt            DateTime   @default(now()) @map("created_at")
-  updatedAt            DateTime?  @updatedAt @map("updated_at")
-  deletedAt            DateTime?  @map("deleted_at")
-  favorites            Favorite[]
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String
+  surname   String
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime?  @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+  favorites Favorite[]
+  carts     Cart[]
 
   @@map("users")
 }
 
 model Favorite {
-  id        Int     @id @default(autoincrement())
-  userId    Int     @map("user_id")
-  user      User    @relation(fields: [userId], references: [id])
-  productId Int     @map("product_id")
-  product   Product @relation(fields: [productId], references: [id])
-
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  user      User      @relation(fields: [userId], references: [id])
+  productId Int       @map("product_id")
+  product   Product   @relation(fields: [productId], references: [id])
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
   @@unique([userId, productId])
   @@map("favorites")
+}
+
+model Cart {
+  id               Int            @id @default(autoincrement())
+  userId           Int?
+  user             User?          @relation(fields: [userId], references: [id])
+  productId        Int
+  product          Product        @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productVariantId Int            @map("product_variant_id")
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  quantity         Int
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime?      @updatedAt @map("updated_at")
+  deletedAt        DateTime?      @map("deleted_at")
+
+  @@map("carts")
 }
 
 model Product {
@@ -49,6 +63,7 @@ model Product {
   image           String?
   productVariants ProductVariant[]
   favorites       Favorite[]
+  carts           Cart[]
 
   @@map("products")
 }
@@ -77,6 +92,7 @@ model ProductVariant {
   product        Product      @relation(fields: [productId], references: [id])
   variantValueId Int          @map("variant_value_id")
   variantValue   VariantValue @relation(fields: [variantValueId], references: [id])
+  carts          Cart[]
 
   @@map("product_variant")
 }
