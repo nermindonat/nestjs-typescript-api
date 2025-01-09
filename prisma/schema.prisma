@@ -25,6 +25,32 @@ model User {
   @@map("users")
 }
 
+model Cart {
+  id        Int        @id @default(autoincrement())
+  userId    Int?       @unique
+  user      User?      @relation(fields: [userId], references: [id])
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime?  @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+  cartItems CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        Int       @id @default(autoincrement())
+  cartId    Int
+  cart      Cart      @relation(fields: [cartId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  productId Int
+  product   Product   @relation(fields: [productId], references: [id])
+  quantity  Int
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("cart_items")
+}
+
 model Favorite {
   id        Int       @id @default(autoincrement())
   userId    Int       @map("user_id")
@@ -39,22 +65,6 @@ model Favorite {
   @@map("favorites")
 }
 
-model Cart {
-  id               Int            @id @default(autoincrement())
-  userId           Int?
-  user             User?          @relation(fields: [userId], references: [id])
-  productId        Int
-  product          Product        @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  productVariantId Int            @map("product_variant_id")
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
-  quantity         Int
-  createdAt        DateTime       @default(now()) @map("created_at")
-  updatedAt        DateTime?      @updatedAt @map("updated_at")
-  deletedAt        DateTime?      @map("deleted_at")
-
-  @@map("carts")
-}
-
 model Product {
   id              Int              @id @default(autoincrement())
   name            String
@@ -63,7 +73,7 @@ model Product {
   image           String?
   productVariants ProductVariant[]
   favorites       Favorite[]
-  carts           Cart[]
+  cartItems       CartItem[]
 
   @@map("products")
 }
@@ -92,7 +102,6 @@ model ProductVariant {
   product        Product      @relation(fields: [productId], references: [id])
   variantValueId Int          @map("variant_value_id")
   variantValue   VariantValue @relation(fields: [variantValueId], references: [id])
-  carts          Cart[]
 
   @@map("product_variant")
 }
