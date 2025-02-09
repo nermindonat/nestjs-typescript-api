@@ -22,8 +22,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { extname } from 'path';
 import { Product } from './entity/product.entity';
 
-@ApiTags('product')
-@Controller('product')
+@ApiTags('products')
+@Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 

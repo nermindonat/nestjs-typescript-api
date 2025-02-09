@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -8,11 +16,25 @@ import {
 import { CreateCartItemDto } from './dto/createCartItem.dto';
 import { CartItemService } from './cartItem.service';
 import { JwtAuthGuard } from 'src/api/auth/guards';
+import { CartItem } from './entity/cartItem.entity';
 
 @ApiTags('cart item')
 @Controller('cart-item')
 export class CartItemController {
   constructor(private readonly cartItemService: CartItemService) {}
+
+  @ApiOperation({ summary: 'Get all cart items' })
+  @ApiResponse({ status: 200, type: [CartItem] })
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('token')
+  async findAll(@Request() req): Promise<CartItem[]> {
+    const userId = req.user.userId;
+    if (!userId) {
+      throw new UnauthorizedException('User ID not found in token');
+    }
+    return this.cartItemService.findAll(userId);
+  }
 
   @ApiOperation({ summary: 'Create cart item' })
   @ApiResponse({ status: 201, type: CreateCartItemDto })

@@ -6,7 +6,7 @@ export class CartItem {
   cartId?: number;
   cart?: Carts;
   productId: number;
-  product: Product;
+  product?: Product;
   quantity: number;
   createdAt: Date;
   updatedAt?: Date;
