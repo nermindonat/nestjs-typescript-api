@@ -57,9 +57,14 @@ export class CartItemService {
     }
   }
 
-  async deleteAll(id: number) {
+  async deleteAll(id: number, userId: number) {
     const item = await this.DBService.cartItem.findUnique({
-      where: { id },
+      where: {
+        id: id,
+        cart: {
+          userId: userId,
+        },
+      },
     });
     if (!item) {
       throw new NotFoundException(`Cart item with ID ${id} not found`);
@@ -70,9 +75,14 @@ export class CartItemService {
     return item;
   }
 
-  async deleteOne(id: number) {
+  async deleteOne(id: number, userId: number) {
     const item = await this.DBService.cartItem.findUnique({
-      where: { id },
+      where: {
+        id: id,
+        cart: {
+          userId: userId,
+        },
+      },
     });
     if (!item) {
       throw new NotFoundException(`Cart item with ID ${id} not found`);

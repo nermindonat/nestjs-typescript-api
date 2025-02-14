@@ -51,14 +51,20 @@ export class CartItemController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete all cart item' })
   @ApiResponse({ type: CartItem })
-  delete(@Param('id') id: string): Promise<CartItem> {
-    return this.cartItemService.deleteAll(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('token')
+  delete(@Request() req, @Param('id') id: string): Promise<CartItem> {
+    const userId = req.user.userId;
+    return this.cartItemService.deleteAll(+id, userId);
   }
 
   @Delete('one/:id')
   @ApiOperation({ summary: 'Decrease quantity of cart item' })
   @ApiResponse({ type: CartItem })
-  deleteOne(@Param('id') id: string): Promise<CartItem> {
-    return this.cartItemService.deleteOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('token')
+  deleteOne(@Request() req, @Param('id') id: string): Promise<CartItem> {
+    const userId = req.user.userId;
+    return this.cartItemService.deleteOne(+id, userId);
   }
 }
