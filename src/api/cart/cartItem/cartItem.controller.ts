@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Request,
   UnauthorizedException,
@@ -44,5 +46,19 @@ export class CartItemController {
   async create(@Request() req, @Body() createCartItemDto: CreateCartItemDto) {
     const userId = req.user.userId;
     return await this.cartItemService.create(createCartItemDto, userId);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete all cart item' })
+  @ApiResponse({ type: CartItem })
+  delete(@Param('id') id: string): Promise<CartItem> {
+    return this.cartItemService.deleteAll(+id);
+  }
+
+  @Delete('one/:id')
+  @ApiOperation({ summary: 'Decrease quantity of cart item' })
+  @ApiResponse({ type: CartItem })
+  deleteOne(@Param('id') id: string): Promise<CartItem> {
+    return this.cartItemService.deleteOne(+id);
   }
 }

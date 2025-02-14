@@ -56,4 +56,35 @@ export class CartItemService {
       });
     }
   }
+
+  async deleteAll(id: number) {
+    const item = await this.DBService.cartItem.findUnique({
+      where: { id },
+    });
+    if (!item) {
+      throw new NotFoundException(`Cart item with ID ${id} not found`);
+    }
+    await this.DBService.cartItem.delete({
+      where: { id },
+    });
+    return item;
+  }
+
+  async deleteOne(id: number) {
+    const item = await this.DBService.cartItem.findUnique({
+      where: { id },
+    });
+    if (!item) {
+      throw new NotFoundException(`Cart item with ID ${id} not found`);
+    }
+    if (item.quantity > 1) {
+      return await this.DBService.cartItem.update({
+        where: { id },
+        data: {
+          quantity: item.quantity - 1,
+        },
+      });
+    }
+    return item;
+  }
 }
