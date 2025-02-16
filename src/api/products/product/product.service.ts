@@ -75,6 +75,7 @@ export class ProductService {
     return {
       ...productWithoutVariants,
       groupedVariants,
+      productVariants,
     };
   }
 }

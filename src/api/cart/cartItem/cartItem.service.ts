@@ -51,6 +51,7 @@ export class CartItemService {
         data: {
           cartId: cartId,
           productId: payload.productId,
+          productVariantId: payload.productVariantId,
           quantity: payload.quantity,
         },
       });

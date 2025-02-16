@@ -6,5 +6,8 @@ export class CreateCartItemDto {
   productId: number;
   @IsNotEmpty()
   @IsNumber()
+  productVariantId: number;
+  @IsNotEmpty()
+  @IsNumber()
   quantity: number;
 }
