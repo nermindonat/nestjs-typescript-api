@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DBService } from 'src/database/DB.service';
 import { CreateCartItemDto } from './dto/createCartItem.dto';
+import { UpdateCartItemDto } from './dto/updateCartItem.dto';
 
 @Injectable()
 export class CartItemService {
@@ -56,6 +57,42 @@ export class CartItemService {
         },
       });
     }
+  }
+
+  async increaseQuantity(
+    id: number,
+    userId: number,
+    payload: UpdateCartItemDto,
+  ) {
+    // Kullanıcının sepetini bul
+    const userCart = await this.DBService.cart.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+    if (!userCart) {
+      throw new NotFoundException(
+        'A cart belonging to the user could not be found.',
+      );
+    }
+    // Sepet öğesini bul
+    const cartItem = await this.DBService.cartItem.findUnique({
+      where: { id },
+    });
+    if (!cartItem) {
+      throw new NotFoundException('Cart item not found');
+    }
+    // Sepet öğesinin kullanıcının sepetine ait olduğunu kontrol et
+    if (cartItem.cartId !== userCart.id) {
+      throw new NotFoundException('Cart item does not belong to the user');
+    }
+    // Miktarı artır ve güncelle
+    return this.DBService.cartItem.update({
+      where: { id },
+      data: {
+        quantity: cartItem.quantity + payload.quantity,
+      },
+    });
   }
 
   async deleteAll(id: number, userId: number) {

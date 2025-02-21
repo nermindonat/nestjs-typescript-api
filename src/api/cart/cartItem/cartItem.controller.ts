@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Request,
   UnauthorizedException,
   UseGuards,
@@ -19,6 +20,7 @@ import { CreateCartItemDto } from './dto/createCartItem.dto';
 import { CartItemService } from './cartItem.service';
 import { JwtAuthGuard } from 'src/api/auth/guards';
 import { CartItem } from './entity/cartItem.entity';
+import { UpdateCartItemDto } from './dto/updateCartItem.dto';
 
 @ApiTags('cart item')
 @Controller('cart-item')
@@ -46,6 +48,24 @@ export class CartItemController {
   async create(@Request() req, @Body() createCartItemDto: CreateCartItemDto) {
     const userId = req.user.userId;
     return await this.cartItemService.create(createCartItemDto, userId);
+  }
+
+  @Put(':id/increase')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('token')
+  @ApiOperation({ summary: 'Increase cart item quantity' })
+  @ApiResponse({ status: 200, type: CartItem })
+  async increaseQuantity(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() updateCartItemDto: UpdateCartItemDto,
+  ) {
+    const userId = req.user.userId;
+    return this.cartItemService.increaseQuantity(
+      +id,
+      userId,
+      updateCartItemDto,
+    );
   }
 
   @Delete(':id')
