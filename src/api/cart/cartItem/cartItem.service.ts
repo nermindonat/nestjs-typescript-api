@@ -16,6 +16,11 @@ export class CartItemService {
       },
       include: {
         product: true,
+        productVariant: {
+          include: {
+            variantValue: true,
+          },
+        },
       },
     });
   }
@@ -36,6 +41,7 @@ export class CartItemService {
       where: {
         cartId: cartId,
         productId: payload.productId,
+        productVariantId: payload.productVariantId,
       },
     });
     if (existingCartItem) {
@@ -113,7 +119,7 @@ export class CartItemService {
     return item;
   }
 
-  async deleteOne(id: number, userId: number) {
+  async decreaseQuantity(id: number, userId: number) {
     const item = await this.DBService.cartItem.findUnique({
       where: {
         id: id,

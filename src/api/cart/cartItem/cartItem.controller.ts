@@ -78,13 +78,13 @@ export class CartItemController {
     return this.cartItemService.deleteAll(+id, userId);
   }
 
-  @Delete('one/:id')
+  @Delete(':id/decrease')
   @ApiOperation({ summary: 'Decrease quantity of cart item' })
   @ApiResponse({ type: CartItem })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('token')
-  deleteOne(@Request() req, @Param('id') id: string): Promise<CartItem> {
+  decreaseQuantity(@Request() req, @Param('id') id: string): Promise<CartItem> {
     const userId = req.user.userId;
-    return this.cartItemService.deleteOne(+id, userId);
+    return this.cartItemService.decreaseQuantity(+id, userId);
   }
 }

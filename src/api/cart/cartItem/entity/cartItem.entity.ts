@@ -8,7 +8,7 @@ export class CartItem {
   cart?: Carts;
   productId: number;
   product?: Product;
-  productVariantId: number;
+  productVariantId?: number;
   productVariant?: ProductVariant;
   quantity: number;
   createdAt: Date;
