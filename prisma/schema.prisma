@@ -21,6 +21,7 @@ model User {
   deletedAt DateTime?  @map("deleted_at")
   favorites Favorite[]
   carts     Cart[]
+  orders    Order[]
 
   @@map("users")
 }
@@ -51,6 +52,17 @@ model CartItem {
   deletedAt        DateTime?       @map("deleted_at")
 
   @@map("cart_items")
+}
+
+model Order {
+  id          Int       @id @default(autoincrement())
+  userId      Int?      @map("user_id")
+  user        User?     @relation(fields: [userId], references: [id])
+  totalAmount Float     @map("total_amount")
+  status      String
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
 }
 
 model Favorite {
