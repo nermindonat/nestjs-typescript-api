@@ -7,11 +7,11 @@ import { UpdateCartItemDto } from './dto/updateCartItem.dto';
 export class CartItemService {
   constructor(private readonly DBService: DBService) {}
 
-  async findAll(userId: number) {
+  async findAll(customerId: number) {
     return await this.DBService.cartItem.findMany({
       where: {
         cart: {
-          userId: userId,
+          customerId: customerId,
         },
       },
       include: {
@@ -25,18 +25,23 @@ export class CartItemService {
     });
   }
 
-  async create(payload: CreateCartItemDto, userId: number) {
-    const userCart = await this.DBService.cart.findUnique({
+  async create(payload: CreateCartItemDto, customerId: number) {
+    // Önce müşterinin sepetini kontrol et
+    let customerCart = await this.DBService.cart.findUnique({
       where: {
-        userId: userId,
+        customerId: customerId,
       },
     });
-    if (!userCart) {
-      throw new NotFoundException(
-        'A cart belonging to the user could not be found.',
-      );
+    // Eğer sepet yoksa yeni sepet oluştur
+    if (!customerCart) {
+      customerCart = await this.DBService.cart.create({
+        data: {
+          customerId: customerId,
+        },
+      });
     }
-    const cartId = userCart.id;
+
+    const cartId = customerCart.id;
     const existingCartItem = await this.DBService.cartItem.findFirst({
       where: {
         cartId: cartId,
@@ -44,6 +49,7 @@ export class CartItemService {
         productVariantId: payload.productVariantId,
       },
     });
+
     if (existingCartItem) {
       return await this.DBService.cartItem.update({
         where: {
@@ -67,18 +73,18 @@ export class CartItemService {
 
   async increaseQuantity(
     id: number,
-    userId: number,
+    customerId: number,
     payload: UpdateCartItemDto,
   ) {
     // Kullanıcının sepetini bul
-    const userCart = await this.DBService.cart.findUnique({
+    const customerCart = await this.DBService.cart.findUnique({
       where: {
-        userId: userId,
+        customerId: customerId,
       },
     });
-    if (!userCart) {
+    if (!customerCart) {
       throw new NotFoundException(
-        'A cart belonging to the user could not be found.',
+        'A cart belonging to the customer could not be found.',
       );
     }
     // Sepet öğesini bul
@@ -89,8 +95,8 @@ export class CartItemService {
       throw new NotFoundException('Cart item not found');
     }
     // Sepet öğesinin kullanıcının sepetine ait olduğunu kontrol et
-    if (cartItem.cartId !== userCart.id) {
-      throw new NotFoundException('Cart item does not belong to the user');
+    if (cartItem.cartId !== customerCart.id) {
+      throw new NotFoundException('Cart item does not belong to the customer');
     }
     // Miktarı artır ve güncelle
     return this.DBService.cartItem.update({
@@ -101,12 +107,12 @@ export class CartItemService {
     });
   }
 
-  async deleteAll(id: number, userId: number) {
+  async deleteAll(id: number, customerId: number) {
     const item = await this.DBService.cartItem.findUnique({
       where: {
         id: id,
         cart: {
-          userId: userId,
+          customerId: customerId,
         },
       },
     });
@@ -119,12 +125,12 @@ export class CartItemService {
     return item;
   }
 
-  async decreaseQuantity(id: number, userId: number) {
+  async decreaseQuantity(id: number, customerId: number) {
     const item = await this.DBService.cartItem.findUnique({
       where: {
         id: id,
         cart: {
-          userId: userId,
+          customerId: customerId,
         },
       },
     });

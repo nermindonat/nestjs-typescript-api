@@ -5,65 +5,71 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../user/entity/user.entity';
-import { UserService } from '../user/user.service';
+
+import { CustomerService } from '../customer/customer.service';
 import { RegisterDto } from './dto/register.dto';
 import { MailService } from '../mail/mail.service';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { Customer } from '../customer/entity/customer.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userSevice: UserService,
+    private readonly customerService: CustomerService,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const existingUser = await this.userSevice.findOne(registerDto.email);
-    if (existingUser) {
-      throw new BadRequestException('User with this email already exists');
+    const existingCustomer = await this.customerService.findOne(
+      registerDto.email,
+    );
+    if (existingCustomer) {
+      throw new BadRequestException('Customer with this email already exists');
     }
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-    const newUser = await this.userSevice.create({
+    const newCustomer = await this.customerService.create({
       ...registerDto,
       password: hashedPassword,
     });
-    const payload = { email: newUser.email, id: newUser.id };
+    const payload = { email: newCustomer.email, id: newCustomer.id };
     const token = this.jwtService.sign(payload);
 
     return {
-      user: newUser,
+      customer: newCustomer,
       token,
     };
   }
 
-  async validateUser(email: string, password: string): Promise<Partial<User>> {
-    const user = await this.userSevice.findOne(email);
-    if (!user) {
-      throw new NotFoundException('User not found');
+  async validateCustomer(
+    email: string,
+    password: string,
+  ): Promise<Partial<Customer>> {
+    const customer = await this.customerService.findOne(email);
+    if (!customer) {
+      return null;
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, customer.password);
     if (!isPasswordValid) {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const { password: _, ...result } = user;
+    const { password: _, ...result } = customer;
     return result;
   }
 
-  async login(user: User) {
-    const payload = { email: user.email, id: user.id };
+  async login(customer: Customer) {
+    const payload = { email: customer.email, id: customer.id };
     return {
       token: this.jwtService.sign(payload),
     };
   }
 
   async forgotPassword(email: string) {
-    const user = await this.userSevice.findOne(email);
-    if (!user) {
-      throw new NotFoundException('No user found for email');
+    const customer = await this.customerService.findOne(email);
+    if (!customer) {
+      throw new NotFoundException('No customer found for email');
     }
     await this.mailService.sendResetPasswordLink(email);
   }
@@ -87,14 +93,16 @@ export class AuthService {
       throw new BadRequestException('Invalid reset token');
     }
 
-    const user = await this.userSevice.findOne(email);
-    if (!user) {
-      throw new NotFoundException('User not found');
+    const customer = await this.customerService.findOne(email);
+    if (!customer) {
+      throw new NotFoundException('Customer not found');
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-    await this.userSevice.updateUser(user.id, { password: hashedPassword });
+    customer.password = hashedPassword;
+    await this.customerService.updateCustomer(customer.id, {
+      password: hashedPassword,
+    });
 
     return { message: 'Password reset successfully' };
   }

@@ -5,15 +5,15 @@ import {
   Request,
   Body,
   Param,
-  BadRequestException,
 } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto';
+import { LoginDto } from './dto/login.dto';
 import { LocalAuthGuard } from './guards';
 import { RegisterDto } from './dto/register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { Customer } from '../customer/entity/customer.entity';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -21,7 +21,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @ApiBody({ type: RegisterDto })
+  @ApiOperation({ summary: 'Register a new customer' })
+  @ApiResponse({ status: 201, type: Customer })
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
   }

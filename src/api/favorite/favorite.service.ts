@@ -10,10 +10,10 @@ import { CreateFavoriteDto } from './dto';
 export class FavoriteService {
   constructor(private readonly DBService: DBService) {}
 
-  async findAll(userId: number) {
+  async findAll(customerId: number) {
     return await this.DBService.favorite.findMany({
       where: {
-        userId: userId,
+        customerId: customerId,
       },
       include: {
         product: true,
@@ -21,23 +21,23 @@ export class FavoriteService {
     });
   }
 
-  async create(payload: CreateFavoriteDto, userId: number) {
+  async create(payload: CreateFavoriteDto, customerId: number) {
     return await this.DBService.favorite.create({
       data: {
-        userId,
+        customerId,
         productId: payload.productId,
       },
     });
   }
 
-  async delete(id: number, userId: number) {
+  async delete(id: number, customerId: number) {
     const item = await this.DBService.favorite.findUnique({
       where: { id },
     });
     if (!item) {
       throw new NotFoundException(`Favorite product with ID ${id} not found`);
     }
-    if (item.userId !== userId) {
+    if (item.customerId !== customerId) {
       throw new UnauthorizedException(
         'You do not have permission to delete this favorite',
       );

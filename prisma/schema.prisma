@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Customer {
   id        Int        @id @default(autoincrement())
   email     String     @unique
   password  String
@@ -23,13 +23,13 @@ model User {
   carts     Cart[]
   orders    Order[]
 
-  @@map("users")
+  @@map("customers")
 }
 
 model Cart {
   id        Int        @id @default(autoincrement())
-  userId    Int?       @unique
-  user      User?      @relation(fields: [userId], references: [id])
+  customerId Int?       @unique
+  customer  Customer?  @relation(fields: [customerId], references: [id])
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime?  @updatedAt @map("updated_at")
   deletedAt DateTime?  @map("deleted_at")
@@ -56,26 +56,28 @@ model CartItem {
 
 model Order {
   id          Int       @id @default(autoincrement())
-  userId      Int?      @map("user_id")
-  user        User?     @relation(fields: [userId], references: [id])
+  customerId  Int?      @map("customer_id")
+  customer    Customer? @relation(fields: [customerId], references: [id])
   totalAmount Float     @map("total_amount")
   status      String
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime? @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
+
+  @@map("orders")
 }
 
 model Favorite {
-  id        Int       @id @default(autoincrement())
-  userId    Int       @map("user_id")
-  user      User      @relation(fields: [userId], references: [id])
-  productId Int       @map("product_id")
-  product   Product   @relation(fields: [productId], references: [id])
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  id          Int       @id @default(autoincrement())
+  customerId  Int       @map("customer_id")
+  customer    Customer  @relation(fields: [customerId], references: [id])
+  productId   Int       @map("product_id")
+  product     Product   @relation(fields: [productId], references: [id])
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
 
-  @@unique([userId, productId])
+  @@unique([customerId, productId])
   @@map("favorites")
 }
 

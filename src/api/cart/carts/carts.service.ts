@@ -7,13 +7,13 @@ export class CartsService {
   constructor(private readonly DBService: DBService) {}
 
   async create(payload: CreateCartsDto) {
-    if (payload.userId) {
-      const user = await this.DBService.user.findUnique({
-        where: { id: payload.userId },
+    if (payload.customerId) {
+      const customer = await this.DBService.customer.findUnique({
+        where: { id: payload.customerId },
       });
-      if (!user) {
+      if (!customer) {
         throw new NotFoundException(
-          `User with ID ${payload.userId} not found.`,
+          `Customer with ID ${payload.customerId} not found.`,
         );
       }
     }
