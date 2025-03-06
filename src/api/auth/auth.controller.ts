@@ -13,7 +13,7 @@ import { LocalAuthGuard } from './guards';
 import { RegisterDto } from './dto/register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { Customer } from '../customer/entity/customer.entity';
+import { Customer } from '../customer/customer/entity/customer.entity';
 
 @ApiTags('auth')
 @Controller('auth')

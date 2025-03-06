@@ -1,4 +1,4 @@
-import { Customer } from 'src/api/customer/entity/customer.entity';
+import { Customer } from 'src/api/customer/customer/entity/customer.entity';
 
 export class Carts {
   id: number;

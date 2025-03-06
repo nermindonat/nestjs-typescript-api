@@ -122,3 +122,28 @@ model ProductVariant {
 
   @@map("product_variant")
 }
+
+model City {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  plateCode Int        @unique @map("plate_code")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime?  @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+  districts District[]
+
+  @@map("cities")
+}
+
+model District {
+  id        Int       @id @default(autoincrement())
+  cityId    Int       @map("city_id")
+  city      City      @relation(fields: [cityId], references: [id])
+  name      String    
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@unique([name, cityId])
+  @@map("districts")
+}

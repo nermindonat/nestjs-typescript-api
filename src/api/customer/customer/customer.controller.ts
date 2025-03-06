@@ -19,7 +19,7 @@ import {
 import { CustomerService } from './customer.service';
 
 import { CreateCustomerDto, UpdateCustomerDto } from './dto';
-import { JwtAuthGuard } from '../auth/guards';
+import { JwtAuthGuard } from '../../auth/guards';
 import { Customer } from './entity/customer.entity';
 
 // Controller, uygulamanızın gelen istekleri (HTTP isteklerini) alıp yönettiği yerdir.

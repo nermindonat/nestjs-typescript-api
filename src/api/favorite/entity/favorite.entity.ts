@@ -1,5 +1,5 @@
 import { Product } from 'src/api/products/product/entity/product.entity';
-import { Customer } from 'src/api/customer/entity/customer.entity';
+import { Customer } from 'src/api/customer/customer/entity/customer.entity';
 
 export class Favorite {
   id: number;

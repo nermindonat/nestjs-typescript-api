@@ -6,11 +6,11 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { CustomerService } from '../customer/customer.service';
+import { CustomerService } from '../customer/customer/customer.service';
 import { RegisterDto } from './dto/register.dto';
 import { MailService } from '../mail/mail.service';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { Customer } from '../customer/entity/customer.entity';
+import { Customer } from '../customer/customer/entity/customer.entity';
 
 @Injectable()
 export class AuthService {
