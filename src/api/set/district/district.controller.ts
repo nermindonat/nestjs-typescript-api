@@ -1,7 +1,11 @@
 import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { DistrictService } from './district.service';
-import { CreateDistrictDto } from './dto/createDistrict.dto';
 import { District } from './entity/district.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
@@ -9,7 +13,6 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 @Controller('districts')
 export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
-
 
   @Get()
   @ApiOperation({ summary: 'Get all districts' })
@@ -40,4 +43,4 @@ export class DistrictController {
   seedDistricts() {
     return this.districtService.seedDistricts();
   }
-} 
+}

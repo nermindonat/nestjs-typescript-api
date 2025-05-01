@@ -27,13 +27,13 @@ model Customer {
 }
 
 model Cart {
-  id        Int        @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   customerId Int?       @unique
-  customer  Customer?  @relation(fields: [customerId], references: [id])
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime?  @updatedAt @map("updated_at")
-  deletedAt DateTime?  @map("deleted_at")
-  cartItems CartItem[]
+  customer   Customer?  @relation(fields: [customerId], references: [id])
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime?  @updatedAt @map("updated_at")
+  deletedAt  DateTime?  @map("deleted_at")
+  cartItems  CartItem[]
 
   @@map("carts")
 }
@@ -68,14 +68,14 @@ model Order {
 }
 
 model Favorite {
-  id          Int       @id @default(autoincrement())
-  customerId  Int       @map("customer_id")
-  customer    Customer  @relation(fields: [customerId], references: [id])
-  productId   Int       @map("product_id")
-  product     Product   @relation(fields: [productId], references: [id])
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime? @updatedAt @map("updated_at")
-  deletedAt   DateTime? @map("deleted_at")
+  id         Int       @id @default(autoincrement())
+  customerId Int       @map("customer_id")
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  productId  Int       @map("product_id")
+  product    Product   @relation(fields: [productId], references: [id])
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
 
   @@unique([customerId, productId])
   @@map("favorites")
@@ -124,26 +124,63 @@ model ProductVariant {
 }
 
 model City {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique
-  plateCode Int        @unique @map("plate_code")
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime?  @updatedAt @map("updated_at")
-  deletedAt DateTime?  @map("deleted_at")
-  districts District[]
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  plateCode       Int?              @unique @map("plate_code")
+  createdAt       DateTime?         @default(now()) @map("created_at")
+  updatedAt       DateTime?         @updatedAt @map("updated_at")
+  deletedAt       DateTime?         @map("deleted_at")
+  districts       District[]
+  customerAddress CustomerAddress[]
 
   @@map("cities")
 }
 
 model District {
-  id        Int       @id @default(autoincrement())
-  cityId    Int       @map("city_id")
-  city      City      @relation(fields: [cityId], references: [id])
-  name      String    
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  id              Int               @id @default(autoincrement())
+  cityId          Int               @map("city_id")
+  city            City              @relation(fields: [cityId], references: [id])
+  name            String
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime?         @updatedAt @map("updated_at")
+  deletedAt       DateTime?         @map("deleted_at")
+  Neighbourhood   Neighbourhood[]
+  customerAddress CustomerAddress[]
 
   @@unique([name, cityId])
   @@map("districts")
+}
+
+model Neighbourhood {
+  id              Int               @id @default(autoincrement())
+  districtId      Int               @map("district_id")
+  district        District          @relation(fields: [districtId], references: [id])
+  name            String
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime?         @updatedAt @map("updated_at")
+  deletedAt       DateTime?         @map("deleted_at")
+  customerAddress CustomerAddress[]
+
+  @@unique([name, districtId])
+  @@map("neighbourhoods")
+}
+
+model CustomerAddress {
+  id              Int           @id @default(autoincrement())
+  name            String
+  surname         String
+  phone           String
+  address         String
+  addressTitle    String        @map("address_title")
+  cityId          Int           @map("city_id")
+  city            City          @relation(fields: [cityId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  districtId      Int           @map("district_id")
+  district        District      @relation(fields: [districtId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  neighbourhoodId Int           @map("neighbourhood_id")
+  neighbourhood   Neighbourhood @relation(fields: [neighbourhoodId], references: [id])
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  deletedAt       DateTime?     @map("deleted_at")
+
+  @@map("customer_addresses")
 }
