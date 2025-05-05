@@ -6,6 +6,7 @@ import { FavoriteModule } from './favorite/favorite.module';
 import { CartModule } from './cart/cart.module';
 import { CityModule } from './set/city/city.module';
 import { DistrictModule } from './set/district/district.module';
+import { NeighbourhoodModule } from './set/neighbourhood/neighbourhood.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DistrictModule } from './set/district/district.module';
     CartModule,
     CityModule,
     DistrictModule,
+    NeighbourhoodModule,
   ],
 })
 export class ApiModule {}
