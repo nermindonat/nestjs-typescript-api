@@ -29,12 +29,12 @@ export class CityController {
     return this.cityService.findCityById(+id);
   }
 
-  @Post('seed')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('token')
-  @ApiOperation({ summary: 'Seed cities data' })
-  @ApiResponse({ status: 201 })
-  seedCities() {
-    return this.cityService.seedCities();
-  }
+  // @Post('seed')
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth('token')
+  // @ApiOperation({ summary: 'Seed cities data' })
+  // @ApiResponse({ status: 201 })
+  // seedCities() {
+  //   return this.cityService.seedCities();
+  // }
 }

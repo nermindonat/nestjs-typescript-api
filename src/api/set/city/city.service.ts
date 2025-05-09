@@ -20,15 +20,15 @@ export class CityService {
     return city;
   }
 
-  async seedCities() {
-    const cities = citiesData.cities;
-    for (const city of cities) {
-      await this.DBService.city.upsert({
-        where: { plateCode: city.plateCode },
-        update: {},
-        create: city,
-      });
-    }
-    return { message: 'Cities seeded successfully' };
-  }
+  // async seedCities() {
+  //   const cities = citiesData.cities;
+  //   for (const city of cities) {
+  //     await this.DBService.city.upsert({
+  //       where: { plateCode: city.plateCode },
+  //       update: {},
+  //       create: city,
+  //     });
+  //   }
+  //   return { message: 'Cities seeded successfully' };
+  // }
 }

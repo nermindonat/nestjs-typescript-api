@@ -7,6 +7,7 @@ import { CartModule } from './cart/cart.module';
 import { CityModule } from './set/city/city.module';
 import { DistrictModule } from './set/district/district.module';
 import { NeighbourhoodModule } from './set/neighbourhood/neighbourhood.module';
+import { CustomerAddressModule } from './customer/customerAddress/customerAddress.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { NeighbourhoodModule } from './set/neighbourhood/neighbourhood.module';
     CityModule,
     DistrictModule,
     NeighbourhoodModule,
+    CustomerAddressModule,
   ],
 })
 export class ApiModule {}

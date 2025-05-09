@@ -126,7 +126,6 @@ model ProductVariant {
 model City {
   id              Int               @id @default(autoincrement())
   name            String            @unique
-  plateCode       Int?              @unique @map("plate_code")
   createdAt       DateTime?         @default(now()) @map("created_at")
   updatedAt       DateTime?         @updatedAt @map("updated_at")
   deletedAt       DateTime?         @map("deleted_at")
